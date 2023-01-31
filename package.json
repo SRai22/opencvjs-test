@@ -13,13 +13,18 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
-    "emscripten-sdk-npm": "0.3.2"
+    "@types/emscripten": "1.39.6"
   },
   "scripts": {
     "start": "NODE_OPTIONS=--max_old_space_size=8192 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   },
   "eslintConfig": {
     "extends": [

@@ -186,12 +186,6 @@ function OpenCV({canvas_id}){
                             <Card.Text style={TitleStyle}>
                                 Exploring image filtering with opencv js
                             </Card.Text>
-                            <Button>
-                                Start Random Matrix
-                            </Button>
-                            <Button>
-                                Stop Random Matrix
-                            </Button>
                         </Card.Body>
                     </Card>
                 </div>
