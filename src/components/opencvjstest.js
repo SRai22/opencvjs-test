@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import image_1 from '../assets/forthesecrit.jpg';
+
+var cv=require('opencv.js');
 
 //similar to css to define styles
 var metaContainerStyle = {
@@ -35,8 +37,38 @@ var inputSizeStyle = {
     marginTop: "10px"
 }
 
+// Convert canvas element to CV mat
+function fromCanvasToMat(canvas_id){
+    let canvas1 = document.getElementById(canvas_id)
+    let ctx = canvas1.getContext('2d')
+    let imgData = ctx.getImageData(0,0,canvas1.width,canvas1.height)
+    let src = cv.matFromImageData(imgData)
+    return src
+}
 
+// Method to apply the convolution filter
+function filterConvolution(src,filter=[-0.5,-0.5,-0.5,-0.5,-0.5,-0.5,-0.5,-0.5,-0.5]){
 
+    let dst = new cv.Mat()
+    let M = cv.matFromArray(Math.sqrt(filter.length), Math.sqrt(filter.length), cv.CV_32FC1, filter)
+    let anchor = new cv.Point(-1,-1)
+    let dst2 = new cv.Mat()
+
+    cv.cvtColor(src, dst2, cv.COLOR_RGBA2GRAY,0) 
+    cv.filter2D(dst2,dst, cv.CV_8U, M, anchor, 0, cv.BORDER_DEFAULT)
+    M.delete(); dst2.delete();
+
+    return dst
+}
+
+//Output the convoluted image
+function drawFilterImage(input_canvas_id, output_canvas_id, filterMatrix){
+    let src = fromCanvasToMat(input_canvas_id)
+    let testHull = filterConvolution(src, filterMatrix['data'])
+    cv.imshow(output_canvas_id, testHull)
+}
+
+// Draw image on canvas
 function fromImageToCanvas(image_id,canvas_id){
     var canvas = document.getElementById(canvas_id);
     var context = canvas.getContext('2d');
@@ -46,6 +78,7 @@ function fromImageToCanvas(image_id,canvas_id){
     context.drawImage(img,0,0);
 }
 
+//Parse values from entered values on event
 function funca(e,value){
 
     value["array"]["data"][value["position"]] = parseFloat(e.target.value)
@@ -113,6 +146,12 @@ function OpenCV({canvas_id}){
         }
         setFilterMatrix({data:arr, size:event.target.value})
     }
+
+    useEffect(()=>
+    {
+        drawFilterImage(input_canvas_id, output_canavas_id, filterMatrix);
+    }, [filterMatrix],
+    )
     return (
         <div>
             <img id={image_id} src={image_1} onLoad={onLoad} style={myStyleImage}/>
