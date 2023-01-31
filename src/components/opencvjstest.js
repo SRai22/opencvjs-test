@@ -13,26 +13,26 @@ var myStyleImage = {
     display: "none"
 }
 
-// var TitleStyle = {
-//     color: "black"
-// }
+var TitleStyle = {
+    color: "black"
+}
 
-// var containerStyle = {
-//     width: "300px",
-//     height: "300px",
-//     overflowY: "auto",
-//     overflowX: "auto"
-// }
+var containerStyle = {
+    width: "300px",
+    height: "300px",
+    overflowY: "auto",
+    overflowX: "auto"
+}
 
 var myStyleInput = {
     padding: 0,
     margin: 0
 }
 
-// var inputSizeStyle = {
-//     width: "300px",
-//     marginTop: "10px"
-// }
+var inputSizeStyle = {
+    width: "300px",
+    marginTop: "10px"
+}
 
 function fromImageToCanvas(image_id,canvas_id){
     var canvas = document.getElementById(canvas_id);
@@ -74,6 +74,7 @@ function OpenCV({canvas_id}){
     })
     var image_id = 'image1'+canvas_id;
     var input_canvas_id = "canvasInputId"+ canvas_id;
+    var output_canavas_id = "canvasOutputId";
     var rows = createMatrixTable(filterMatrix, setFilterMatrix);
 
     function onLoad(){
@@ -84,16 +85,41 @@ function OpenCV({canvas_id}){
             <img id={image_id} src={image_1} onLoad={onLoad} style={myStyleImage}/>
             <div style={metaContainerStyle}>
                 <div>
-                    <Card>
+                    <Card style = {{ width: '30rem'}}>
                         <canvas id={input_canvas_id}></canvas>
-                        <div style={gridStyle}>
-                            {rows}
-                        </div>
+                        <Card.Body>
+                            <div style={containerStyle}>
+                                <div style={gridStyle}>
+                                    {rows}
+                                </div>
+                            </div>
+                            <input
+                            style = {inputSizeStyle}
+                            type  = "number"
+                            name  = "name"
+                            min   = "2"
+                            value = {filterMatrix["size"]}
+                            />
+                        </Card.Body>
                     </Card>
                 </div>
                 <div>
-                    <Card>
-                        Card-2
+                    <Card style = {{ width: '30rem', height: '100%'}}>
+                        <canvas id={output_canavas_id}></canvas>
+                        <Card.Body>
+                            <Card.Title style={TitleStyle}>
+                                Image Filtering
+                            </Card.Title>
+                            <Card.Text style={TitleStyle}>
+                                Exploring image filtering with opencv js
+                            </Card.Text>
+                            <Button>
+                                Start Random Matrix
+                            </Button>
+                            <Button>
+                                Stop Random Matrix
+                            </Button>
+                        </Card.Body>
                     </Card>
                 </div>
             </div>
